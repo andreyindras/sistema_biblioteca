@@ -1,0 +1,11 @@
+Rodar aplicação: 
+python app.py
+
+Rodar testes automatizados:  
+pip install pytest flask
+python -m pytest -v
+
+Rodar teste Selenium: 
+pip install selenium
+pip install webdriver-manage
+python tests/test_biblioteca_selenium.py

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Catálogo de Livros{% endblock %}
+{% block content %}
+<h1>Parte 2 – Catálogo de Livros</h1>
+
+<form method="POST">
+    <input type="text" name="titulo" placeholder="Título" required maxlength="200">
+    <input type="text" name="autores" placeholder="Autores" required maxlength="100">
+    <input type="text" name="isbn" placeholder="ISBN (10-13)" pattern="[0-9]{10,13}">
+    <input type="text" name="edicao" placeholder="Edição">
+    <input type="number" name="ano" placeholder="Ano" min="0">
+    <input type="number" name="copiasTotal" placeholder="Cópias" required min="1">
+    <button type="submit">Adicionar</button>
+</form>
+
+<h2>Livros</h2>
+<table>
+    <tr><th>ID</th><th>Título</th><th>Autores</th><th>ISBN</th><th>Cópias</th><th>Disponíveis</th><th>Status</th></tr>
+    {% for l in livros %}
+    <tr>
+        <td>{{ l[0] }}</td><td>{{ l[1] }}</td><td>{{ l[2] }}</td><td>{{ l[3] or '-' }}</td>
+        <td>{{ l[6] }}</td><td>{{ l[7] }}</td><td>{{ l[8] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
