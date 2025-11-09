@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Relatórios{% endblock %}
+{% block content %}
+<h1>Relatórios</h1>
+
+<div class="filters">
+    <input type="date" id="start" placeholder="Data início">
+    <input type="date" id="end" placeholder="Data fim">
+    <button onclick="carregar(1)">Filtrar</button>
+</div>
+
+<table id="tabela-relatorio">
+    <thead>
+        <tr><th>ID</th><th>Matrícula</th><th>Título</th><th>Emprestado</th><th>Previsto</th><th>Status</th></tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div class="pagination" id="paginacao"></div>
+
+<script>
+async function carregar(page = 1) {
+    const start = document.getElementById('start').value;
+    const end = document.getElementById('end').value;
+    let url = `/api/relatorio/emprestimos?page=${page}`;
+    if (start) url += `&start=${start}`;
+    if (end) url += `&end=${end}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const tbody = document.querySelector('#tabela-relatorio tbody');
+    tbody.innerHTML = '';
+    data.data.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.loanId}</td><td>${r.matricula}</td><td>${r.titulo}</td><td>${r.emprestimo}</td><td>${r.devolucao_prevista}</td><td>${r.status}</td>`;
+        tbody.appendChild(tr);
+    });
+
+    // Paginação
+    const pag = document.getElementById('paginacao');
+    pag.innerHTML = '';
+    for (let i = 1; i <= data.pagination.total_pages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.onclick = () => carregar(i);
+        if (i === page) btn.style.fontWeight = 'bold';
+        pag.appendChild(btn);
+    }
+}
+carregar();
+</script>
+{% endblock %}
